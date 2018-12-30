@@ -1,0 +1,78 @@
+<!-- HEADER -->
+<div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+
+  <div class="main-text">
+    <h1>Categories</h1>
+  </div>
+</div>
+<!-- / HEADER -->
+<!-- CENTER fusePerfectScrollbar-->
+<div class="center p-24 pb-56">
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <div class="left m-32">
+      <div class="content">
+
+        <!-- SEARCH -->
+        <div class="search-input-wrapper mt-16 ml-8 m-sm-0" fxLayout="row" fxLayoutAlign="end center">
+          <label for="search" class="mr-8">
+            <mat-icon>search</mat-icon>
+          </label>
+          <mat-form-field mat-no-float class="m-0" floatPlaceholder="never">
+            <input matInput [formControl]="searchInput" id="searchPatient" placeholder="Search for anything">
+          </mat-form-field>
+
+          <div class="excel-file cursor-pointer ml-24" matTooltip="Export to Excel" (click)="exportToExcel()"></div>
+
+        </div>
+        <!-- / SEARCH  -->
+        <div class="spinner-container" *ngIf="dataSource.loading" fxLayout="column"
+             fxLayoutAlign="center center">
+          <mat-spinner [diameter]="50"></mat-spinner>
+          Loading...
+        </div>
+
+        <div class="table-container mat-elevation-z8">
+          <mat-table #table [dataSource]="dataSource">
+
+            <ng-container cdkColumnDef="name">
+              <mat-header-cell *cdkHeaderCellDef fxHide fxShow.gt-sm>Category Name</mat-header-cell>
+              <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-sm>
+                <p>
+                  {{row.name}}
+                </p>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Action Column -->
+            <ng-container cdkColumnDef="action">
+              <mat-header-cell *cdkHeaderCellDef>Actions</mat-header-cell>
+              <mat-cell *cdkCellDef="let row">
+                <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu" xPosition="before">
+                  <button mat-menu-item (click)="openDialog(row)">Employees</button>
+                  <button mat-menu-item (click)="openMessageDialog(row)">Messages</button>
+                </mat-menu>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+          </mat-table>
+
+          <mat-paginator [length]="total" [pageSize]="15" [pageSizeOptions]="[15]"></mat-paginator>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- / CONTENT -->
+
+</div>
+<!-- / CENTER -->
