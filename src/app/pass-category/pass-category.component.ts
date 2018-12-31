@@ -17,8 +17,7 @@ import {of} from "rxjs/internal/observable/of";
 export class PassCategoryComponent implements OnInit, AfterViewInit {
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort) sort: MatSort;
-    dataSource: TableMainDataSource | null;
+    dataSource: TableMainDataSource;
     name: string;
     total: number;
     searchInput: FormControl;
@@ -32,7 +31,7 @@ export class PassCategoryComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-        this.dataSource = new TableMainDataSource(this.paginator, this.sort, this._roboService);
+        this.dataSource = new TableMainDataSource(this.paginator, this._roboService);
         setTimeout(() => {
             this.dataSource.total.subscribe( res => this.total = res);
         })
@@ -100,7 +99,6 @@ export class TableMainDataSource extends DataSource<any> {
 
     constructor(
         private paginator: MatPaginator,
-        private sort: MatSort,
         private _roboService: RoboPassService
     ) {
         super();

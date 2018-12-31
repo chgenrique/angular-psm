@@ -1,78 +1,49 @@
-<!-- HEADER -->
-<div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+<div class="mat-elevation-z8">
+  <!-- SEARCH -->
+  <div class="search-input-wrapper mt-16 ml-8 m-sm-0" fxLayout="row" fxLayoutAlign="end center">
+    <label for="search" class="mr-8">
+      <mat-icon>search</mat-icon>
+    </label>
+    <mat-form-field mat-no-float class="m-0" floatPlaceholder="never">
+      <input matInput [formControl]="searchInput" id="searchPatient" placeholder="Search for anything">
+    </mat-form-field>
 
-  <div class="main-text">
-    <h1>Categories</h1>
+    <div class="excel-file cursor-pointer ml-24" matTooltip="Export to Excel" (click)="exportToExcel()"></div>
+
   </div>
-</div>
-<!-- / HEADER -->
-<!-- CENTER fusePerfectScrollbar-->
-<div class="center p-24 pb-56">
+  <!-- / SEARCH  -->
 
-  <!-- CONTENT -->
-  <div class="content">
 
-    <div class="left m-32">
-      <div class="content">
+  <table mat-table class="full-width-table" [dataSource]="dataSource" matSort aria-label="Elements">
 
-        <!-- SEARCH -->
-        <div class="search-input-wrapper mt-16 ml-8 m-sm-0" fxLayout="row" fxLayoutAlign="end center">
-          <label for="search" class="mr-8">
-            <mat-icon>search</mat-icon>
-          </label>
-          <mat-form-field mat-no-float class="m-0" floatPlaceholder="never">
-            <input matInput [formControl]="searchInput" id="searchPatient" placeholder="Search for anything">
-          </mat-form-field>
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <td mat-cell *matCellDef="let row">{{row.name}}</td>
+    </ng-container>
 
-          <div class="excel-file cursor-pointer ml-24" matTooltip="Export to Excel" (click)="exportToExcel()"></div>
-
-        </div>
-        <!-- / SEARCH  -->
-        <div class="spinner-container" *ngIf="dataSource.loading" fxLayout="column"
-             fxLayoutAlign="center center">
-          <mat-spinner [diameter]="50"></mat-spinner>
-          Loading...
-        </div>
-
-        <div class="table-container mat-elevation-z8">
-          <mat-table #table [dataSource]="dataSource">
-
-            <ng-container cdkColumnDef="name">
-              <mat-header-cell *cdkHeaderCellDef fxHide fxShow.gt-sm>Category Name</mat-header-cell>
-              <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-sm>
-                <p>
-                  {{row.name}}
-                </p>
-              </mat-cell>
-            </ng-container>
-
-            <!-- Action Column -->
-            <ng-container cdkColumnDef="action">
-              <mat-header-cell *cdkHeaderCellDef>Actions</mat-header-cell>
-              <mat-cell *cdkCellDef="let row">
-                <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-                  <mat-icon>more_vert</mat-icon>
-                </button>
-                <mat-menu #menu="matMenu" xPosition="before">
-                  <button mat-menu-item (click)="openDialog(row)">Employees</button>
-                  <button mat-menu-item (click)="openMessageDialog(row)">Messages</button>
-                </mat-menu>
-              </mat-cell>
-            </ng-container>
-
-            <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-
-          </mat-table>
-
-          <mat-paginator [length]="total" [pageSize]="15" [pageSizeOptions]="[15]"></mat-paginator>
-
-        </div>
-
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Actions</th>
+      <td mat-cell *matCellDef="let row"><div>
+        <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu" xPosition="before">
+          <button mat-menu-item (click)="doShow()">Show</button>
+          <button mat-menu-item>Remove</button>
+        </mat-menu>
       </div>
-    </div>
-  </div>
-  <!-- / CONTENT -->
+      </td>
+    </ng-container>
 
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator #paginator
+                 [length]="dataSource.length"
+                 [pageIndex]="0"
+                 [pageSize]="50"
+                 [pageSizeOptions]="[25, 50, 100, 250]">
+  </mat-paginator>
 </div>
-<!-- / CENTER -->
