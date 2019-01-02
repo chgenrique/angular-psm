@@ -1,0 +1,29 @@
+<h2 align="center">Login</h2>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="login-container">
+        <mat-form-field>
+            <input matInput type="text" placeholder="Username" formControlName="username">
+            <mat-error *ngIf="username.hasError('email') && !username.hasError('required')">
+                Please enter a valid email address
+            </mat-error>
+            <mat-error *ngIf="username.hasError('required')">
+                Username is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Enter your password" placeholder="Password" formControlName="password"
+                   [type]="hide ? 'password' : 'text'">
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            <mat-error *ngIf="password.hasError('required')">
+                Password is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        <div>
+            <button mat-button type="submit" [disabled]="loading" color="primary">Login</button>
+            <a [routerLink]="['/register']" class="btn btn-link">Register</a>
+        </div>
+    </div>
+</form>
+
+

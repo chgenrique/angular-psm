@@ -1,5 +1,5 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport="true"
+  <mat-sidenav #drawer class="sidenav" fixedInViewport="true" *ngIf="isAuthenticated()"
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="!(isHandset$ | async)">
@@ -19,6 +19,7 @@
       </a>
     </mat-nav-list>
   </mat-sidenav>
+
   <mat-sidenav-content>
     <mat-toolbar color="primary">
       <button
@@ -29,7 +30,10 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>angular-robo-pass</span>
+      <span>Robopass</span>
+
+      <button mat-button (click)="onLogout()" *ngIf="isAuthenticated()">Logout</button>
+
     </mat-toolbar>
     <!-- Add Content Here -->
     <router-outlet></router-outlet>

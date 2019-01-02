@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs/internal/Observable";
-import {environment} from "../environments/environment";
+import {environment} from "../../environments/environment";
 import {Subject} from "rxjs/internal/Subject";
 import {map} from "rxjs/operators";
 
 @Injectable()
 export class RoboPassService {
-
   onSearchTextChanged: Subject<any> = new Subject();
   searchText: string;
   CONFIG = environment;
-
 
   constructor(
       private _httpClient: HttpClient

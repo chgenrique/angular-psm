@@ -25,21 +25,18 @@ import {
     MatProgressBarModule, MatAutocompleteModule
 } from '@angular/material';
 import {PassCategoryComponent} from './pass-category/pass-category.component';
-import {RouterModule, Routes} from "@angular/router";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MainNavComponent} from './main-nav/main-nav.component';
 import {PassDashboardComponent} from './pass-dashboard/pass-dashboard.component';
 import {PassAccountComponent} from './pass-account/pass-account.component';
-import {HttpClientModule} from "@angular/common/http";
-import {RoboPassService} from "./robo-pass.service";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {RoboPassService} from "./_services/robo-pass.service";
 import {CommonModule} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-
-const appRoutes: Routes = [
-    {path: 'dashboard', component: PassCategoryComponent},
-    {path: 'pass-category', component: PassCategoryComponent},
-    {path: 'pass-account', component: PassAccountComponent},
-];
+import {LoginComponent} from './login/login.component';
+import {ErrorInterceptor, fakeBackendProvider, JwtInterceptor} from "./_helpers";
+import {AuthenticationService} from "./_services/authentication/authentication.service";
+import {AuthGuard} from "./_services/authentication/auth.guard";
 
 @NgModule({
     declarations: [
@@ -47,11 +44,12 @@ const appRoutes: Routes = [
         PassCategoryComponent,
         MainNavComponent,
         PassDashboardComponent,
-        PassAccountComponent
+        PassAccountComponent,
+        LoginComponent,
     ],
     imports: [
         BrowserModule,
-        AppRoutingModule,
+        AppRoutingModule, // here call routing
         LayoutModule,
         MatToolbarModule,
         MatButtonModule,
@@ -66,30 +64,29 @@ const appRoutes: Routes = [
         MatCardModule,
         MatSelectModule,
         MatMenuModule,
-        MatButtonModule,
         MatFormFieldModule,
-        MatIconModule,
         MatInputModule,
-        MatMenuModule,
         MatRippleModule,
-        MatTableModule,
-        MatToolbarModule,
         MatProgressSpinnerModule,
-        MatPaginatorModule,
-        MatSortModule,
         MatProgressBarModule,
         MatAutocompleteModule,
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
         CommonModule,
-        RouterModule.forRoot(appRoutes),
         MatDialogModule,
         MatCheckboxModule,
     ],
     providers: [
         RoboPassService,
+        AuthenticationService,
+        AuthGuard,
+        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+        // provider used to create fake backend
+        fakeBackendProvider
     ],
+
     bootstrap: [AppComponent]
 })
 export class AppModule {
