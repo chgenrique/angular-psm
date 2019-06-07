@@ -17,21 +17,23 @@ import {of} from "rxjs/internal/observable/of";
 export class PassCategoryComponent implements OnInit, AfterViewInit {
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild(MatSort) sort: MatSort;
+
     dataSource: TableMainDataSource;
     name: string;
     total: number;
     searchInput: FormControl;
-    displayedColumns = ['name', 'action'];
+    displayedColumns: string[] = ['name', 'action'];
 
     constructor(
         public dialog: MatDialog,
-        private _roboService: RoboPassService
+        private masterPassService: RoboPassService
         ) {
         this.searchInput = new FormControl('');
     }
 
     ngOnInit() {
-        this.dataSource = new TableMainDataSource(this.paginator, this._roboService);
+        this.dataSource = new TableMainDataSource(this.paginator, this.sort, this.masterPassService);
         setTimeout(() => {
             this.dataSource.total.subscribe( res => this.total = res);
         })
@@ -99,7 +101,8 @@ export class TableMainDataSource extends DataSource<any> {
 
     constructor(
         private paginator: MatPaginator,
-        private _roboService: RoboPassService
+        private sort: MatSort,
+        private masterPassService: RoboPassService
     ) {
         super();
     }
@@ -124,7 +127,7 @@ export class TableMainDataSource extends DataSource<any> {
     }
 
     listCategories(search='', pageNumber=0, pageSize=20): void {
-        this._roboService.getCategories(
+        this.masterPassService.getCategories(
             search, pageNumber, pageSize
         ).pipe(
             catchError(()=>of([])),
@@ -138,5 +141,4 @@ export class TableMainDataSource extends DataSource<any> {
             }
         );
     }
-
 }

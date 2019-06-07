@@ -1,6 +1,5 @@
 <app-login *ngIf="!isAuthenticated()"></app-login>
 
-
 <mat-sidenav-container class="sidenav-container" *ngIf="isAuthenticated()">
     <mat-sidenav #drawer class="sidenav" fixedInViewport="true" *ngIf="isAuthenticated()"
                  [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
@@ -35,7 +34,7 @@
             </button>
             <span>Robopass</span>
 
-            <button  mat-button (click)="onLogout()" *ngIf="isAuthenticated()">
+            <button mat-button (click)="onLogout()" *ngIf="isAuthenticated()">
                 <mat-icon>play_for_work</mat-icon>
                 Logout
             </button>
